@@ -89,7 +89,6 @@ body {
 .add-btn {
     box-sizing: border-box;
     height: 60%;
-    
     margin-left: 15px;
     display: flex;
     align-items: center;
@@ -110,4 +109,17 @@ body {
     height: 35px;
     filter: invert(60%) sepia(49%) saturate(5019%) hue-rotate(356deg) brightness(97%) contrast(90%);
     margin-right: 8px;
+}
+
+.proj-col-title {
+    font-weight: 600;
+}
+
+.proj-col-title:not(:first-child) {
+    margin-top: 15px;
+}
+
+.task-icon {
+    height: 16px;
+    margin-left: 20px;
 }
