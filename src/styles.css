@@ -107,7 +107,6 @@ body {
 
 .add-icon {
     height: 35px;
-    filter: invert(60%) sepia(49%) saturate(5019%) hue-rotate(356deg) brightness(97%) contrast(90%);
     margin-right: 8px;
 }
 
@@ -123,3 +122,35 @@ body {
     height: 16px;
     margin-left: 20px;
 }
+
+.icon {
+    filter: invert(60%) sepia(49%) saturate(5019%) hue-rotate(356deg) brightness(97%) contrast(90%);
+}
+
+/* Main section view styling */
+.right-panel {
+    box-sizing: border-box;
+    padding: 50px;
+}
+
+.main-project-icon {
+    height: 75px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.main-title-wrapper {
+    display: flex;
+}
+
+.main-header {
+    margin-top: 40px;
+}
+
+.due-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(70, 70, 70);
+}
+
+

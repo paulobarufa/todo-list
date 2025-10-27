@@ -3,13 +3,14 @@ export class Task {
     completed = false;
     priority = 0;
 
-    constructor(name, description, dueDate, project, priority) {
+    constructor(name, description, notes, dueDate, projectid, priority) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
-        this.project = project;
+        this.projectid = projectid;
         this.id = crypto.randomUUID;
         this.priority = priority;
+        this.notes = notes;
     }
 
     markCompleted() {
