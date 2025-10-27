@@ -6,7 +6,7 @@ export class Project {
     constructor(name, description) {
         this.name = name;
         this.description = description;
-        this.id = id = crypto.randomUUID();
+        this.id = crypto.randomUUID();
     }
 
     addTask(task) {

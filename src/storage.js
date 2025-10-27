@@ -3,18 +3,35 @@ import { Task } from "./task";
 
 export class StorageWriter {
     
-    getStorage() {
+    static getStorage() {
         const projectListObject = JSON.parse(localStorage.getItem("projectList"));
 
         let projectList = [];
 
-        for (const project of projectList) {
-            
+        for (const projectObj of projectListObject) {
+            let project = new Project(projectObj.name, projectObj.description)
+
+            project.completed = projectObj.completed;
+            project.id = projectObj.id;
+
+            for (const taskObj of projectObj.tasks) {
+                let task = new Task(taskObj.name, taskObj.description, taskObj.dueDate, project, taskObj.priority);
+
+                task.id = taskObj.id;
+                task.completed = taskObj.completed;
+
+                project.tasks.push(task);
+            }
+
+            projectList.push(project);
+
         }
+
+        return projectList;
 
     }
 
-    setStorage(projectList) {
+    static setStorage(projectList) {
         localStorage.setItem("projectList", JSON.stringify(projectList));
     }
 
