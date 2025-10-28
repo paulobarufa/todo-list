@@ -23,5 +23,9 @@ export class ViewController {
     constructor(projects) {
         this.projects = projects;
     }
+
+    updateView() {
+        
+    }
     
 }
