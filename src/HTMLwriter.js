@@ -44,7 +44,7 @@ export class HTMLwriter {
     static generateView(viewObj) {
 
 
-        return HTMLwriter.generateProjectEdit()
+        return HTMLwriter.generateTaskEdit()
 
     }
 
@@ -235,25 +235,118 @@ export class HTMLwriter {
         return mainWrapper;
     }
 
-    /*         <form class="create-project">
+    static generateTaskEdit() {
 
-            <fieldset>
-                <label for="form-project-description" class="form-label">Description</label>
-                <input type="text" name="input-project-description" id="input-project-description" class="text-input">
-            </fieldset>
-            <fieldset>
-                <label for="form-project-date" class="form-label">Due date</label>
-                <input type="text" name="input-project-date" id="input-project-date" class="text-input">
-            </fieldset>
-            <fieldset>
-                <label for="form-project-notes" class="form-label">Notes</label>
-                <textarea name="input-project-notes" id="input-project-notes" rows="6" class="text-input"></textarea>
-            </fieldset>
+        // View Wrapper
+        const mainWrapper = document.createElement("div")
 
+        // Information objects
+        const formObject = document.createElement("form")
+        formObject.classList.add("create-project")
 
+        const formHeader = document.createElement("h1")
+        formHeader.classList.add("project-title")
+        formHeader.append(document.createTextNode("New Task"))
 
-        </form> */
+        // Title fieldset
+        const fieldsetTitle = document.createElement("fieldset")
+        fieldsetTitle.classList.add("fieldset-form")
+        const labelTitle = document.createElement("label")
+        labelTitle.classList.add("form-label")
+        labelTitle.htmlFor = "form-task-title";
+        labelTitle.appendChild(document.createTextNode("Title"))
+        const inputTitle = document.createElement("input")
+        inputTitle.type = "text";
+        inputTitle.name = "input-task-title";
+        inputTitle.id = "input-task-title";
+        inputTitle.classList.add("text-input")
+        fieldsetTitle.append(labelTitle, inputTitle)
 
+        // Description fieldset
+        const fieldsetDescription = document.createElement("fieldset")
+        fieldsetDescription.classList.add("fieldset-form")
+        const labelDescription = document.createElement("label")
+        labelDescription.classList.add("form-label")
+        labelDescription.htmlFor = "form-task-description";
+        labelDescription.appendChild(document.createTextNode("Description"))
+        const inputDescription = document.createElement("input")
+        inputDescription.type = "text";
+        inputDescription.name = "input-task-description";
+        inputDescription.id = "input-task-description";
+        inputDescription.classList.add("text-input")
+        fieldsetDescription.append(labelDescription, inputDescription)
 
+        // Date fieldset
+        const fieldsetDate = document.createElement("fieldset")
+        fieldsetDate.classList.add("fieldset-form")
+        const labelDate = document.createElement("label")
+        labelDate.classList.add("form-label")
+        labelDate.htmlFor = "form-task-date";
+        labelDate.appendChild(document.createTextNode("Due Date"))
+        const inputDate = document.createElement("input")
+        inputDate.type = "date";
+        inputDate.name = "input-task-date";
+        inputDate.id = "input-task-date";
+        inputDate.classList.add("date-input")
+        fieldsetDate.append(labelDate, inputDate)
+
+        // Notes fieldset
+        const fieldsetNotes = document.createElement("fieldset")
+        fieldsetNotes.classList.add("fieldset-form")
+        const labelNotes = document.createElement("label")
+        labelNotes.classList.add("form-label")
+        labelNotes.htmlFor = "form-task-notes";
+        labelNotes.appendChild(document.createTextNode("Notes"))
+        const inputNotes = document.createElement("textarea")
+        inputNotes.name = "input-task-notes";
+        inputNotes.id = "input-task-notes";
+        inputNotes.rows = "6";
+        inputNotes.classList.add("text-input")
+        fieldsetNotes.append(labelNotes, inputNotes)
+
+        // Priority fieldset
+        const fieldsetPriority = document.createElement("fieldset")
+        fieldsetPriority.classList.add("fieldset-form")
+        const legendPriority = document.createElement("label")
+        legendPriority.classList.add("form-label")
+        legendPriority.appendChild(document.createTextNode("Priority"))
+
+        const radioStandardWrapper = document.createElement("div")
+        radioStandardWrapper.classList.add("radio-wrapper")
+        const inputRadioStandard = document.createElement("input")
+        inputRadioStandard.classList.add("radio-input")
+        inputRadioStandard.type = "radio";
+        inputRadioStandard.id = "radio-standard";
+        inputRadioStandard.name = "task-priority";
+        inputRadioStandard.value = 0;
+        inputRadioStandard.checked = true;
+        const labelStandard = document.createElement("label")
+        labelStandard.classList.add("radio-label")
+        labelStandard.htmlFor = "radio-standard";
+        labelStandard.appendChild(document.createTextNode("Standard"))
+        radioStandardWrapper.append(inputRadioStandard, labelStandard)
+
+        const radioImportantWrapper = document.createElement("div")
+        radioImportantWrapper.classList.add("radio-wrapper")
+        const inputRadioImportant = document.createElement("input")
+        inputRadioImportant.classList.add("radio-input")
+        inputRadioImportant.type = "radio";
+        inputRadioImportant.id = "radio-important";
+        inputRadioImportant.name = "task-priority";
+        inputRadioImportant.value = 1;
+        const labelImportant = document.createElement("label")
+        labelImportant.classList.add("radio-label")
+        labelImportant.htmlFor = "radio-important";
+        labelImportant.appendChild(document.createTextNode("Important"))
+        radioImportantWrapper.append(inputRadioImportant, labelImportant)
+
+        fieldsetPriority.append(legendPriority, radioStandardWrapper, radioImportantWrapper)
+
+        // Append everything
+        formObject.append(formHeader, fieldsetTitle, fieldsetDescription, fieldsetDate, fieldsetNotes, fieldsetPriority);
+        mainWrapper.append(formObject);
+
+        return mainWrapper;
+    }
 
 }
