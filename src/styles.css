@@ -16,7 +16,11 @@ body {
 /* Grid layout */
 .left-panel {
     grid-area: 1 / 1 / 2 / 2;
+}
+
+.left-wrapper {
     display: grid;
+    height: 100%;
     grid-template-rows: 1fr 6fr;
 }
 

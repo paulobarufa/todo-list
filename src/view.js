@@ -20,8 +20,8 @@ export class ViewController {
     mode = 1;
     id = "";
 
-    constructor(projArray) {
-        this.projArray = projArray;
+    constructor(projects) {
+        this.projects = projects;
     }
     
 }

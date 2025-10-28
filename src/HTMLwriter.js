@@ -1,15 +1,58 @@
 import projectIcon from "./images/project.svg"
 import taskIcon from "./images/task.svg"
 import checkIcon from "./images/check.svg"
+import todayIcon from "./images/today.svg"
+import upcomingIcon from "./images/upcoming.svg"
+import improtantIcon from "./images/important.svg"
 
 export class HTMLwriter {
 
     static generateCol(projArray) {
 
-        let newWrapper = document.createElement("div");
+        // Main wrapper
+        const wrapperPanel = document.createElement("div")
+        wrapperPanel.classList.add("left-wrapper")
+
+        const logo = document.createElement("div")
+        logo.classList.add("logo")
+        logo.appendChild(document.createTextNode("MauList."))
+
+        const listWrapper = document.createElement("div")
+        listWrapper.classList.add("list-wrapper")
+
+        // Fixed wrapper
+        const fixedWrapper = document.createElement("div")
+        fixedWrapper.classList.add("fixed-wrapper")
+
+        const colToday = document.createElement("div")
+        colToday.classList.add("col-item", "today")
+        const todayImg = document.createElement("img")
+        todayImg.src = todayIcon;
+        todayImg.classList.add("col-icon", "icon")
+        colToday.append(todayImg, document.createTextNode("Due today"))
+
+        const colUpcoming = document.createElement("div")
+        colUpcoming.classList.add("col-item", "upcoming")
+        const UpcomingImg = document.createElement("img")
+        UpcomingImg.src = upcomingIcon;
+        UpcomingImg.classList.add("col-icon", "icon")
+        colUpcoming.append(UpcomingImg, document.createTextNode("Upcoming"))
+
+        const colImportant = document.createElement("div")
+        colImportant.classList.add("col-item", "important")
+        const importantImg = document.createElement("img")
+        importantImg.src = improtantIcon;
+        importantImg.classList.add("col-icon", "icon")
+        colImportant.append(importantImg, document.createTextNode("Important"))
+
+        fixedWrapper.append(colToday, colUpcoming, colImportant)
+
+        // Dynamic Wrapper
+        const dynamicWrapper = document.createElement("div");
+        dynamicWrapper.classList.add("dynamic-wrapper")
 
         for (const project of projArray) {
-            let projDiv = document.createElement("div");
+            const projDiv = document.createElement("div");
             projDiv.classList.add("col-item", "proj-col-title");
 
             const projTitle = document.createTextNode(project.name);
@@ -20,10 +63,10 @@ export class HTMLwriter {
 
             projDiv.append(projImage, projTitle);
 
-            newWrapper.appendChild(projDiv);
+            dynamicWrapper.appendChild(projDiv);
 
             for (const task of project.tasks) {
-                let taskDiv = document.createElement("div");
+                const taskDiv = document.createElement("div");
                 taskDiv.classList.add("col-item", "task-col-title");
 
                 const taskTitle = document.createTextNode(task.name);
@@ -34,11 +77,14 @@ export class HTMLwriter {
                 
                 taskDiv.append(taskImg, taskTitle);
 
-                newWrapper.appendChild(taskDiv);
+                dynamicWrapper.appendChild(taskDiv);
             }
         }
 
-        return newWrapper;
+        listWrapper.append(fixedWrapper, dynamicWrapper)
+        wrapperPanel.append(logo, listWrapper)
+
+        return wrapperPanel;
     }
 
     static generateView(viewObj) {

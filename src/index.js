@@ -7,7 +7,7 @@ import { HTMLwriter } from "./HTMLwriter";
 import { ViewController } from "./view";
 
 // Get wrappers
-const dynamicWrapper = document.querySelector(".dynamic-wrapper");
+const leftPanel = document.querySelector(".left-panel");
 const mainPanel = document.querySelector(".right-panel");
 
 // Get project Array from storage
@@ -22,10 +22,10 @@ const viewWrapper = HTMLwriter.generateView(viewController);
 
 // Clear Wrappers
 //mainPanel.innerHTML = "";
-dynamicWrapper.innerHTML = "";
+leftPanel.innerHTML = "";
 
 //Append views
-dynamicWrapper.appendChild(colWrapper);
+leftPanel.appendChild(colWrapper);
 mainPanel.appendChild(viewWrapper);
 
 
