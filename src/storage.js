@@ -16,7 +16,7 @@ export class StorageWriter {
             project.id = projectObj.id;
 
             for (const taskObj of projectObj.tasks) {
-                let task = new Task(taskObj.name, taskObj.description, taskObj.dueDate, taskObj.projectid, taskObj.priority);
+                let task = new Task(taskObj.name, taskObj.description, taskObj.notes, taskObj.dueDate, taskObj.projectid, taskObj.priority);
 
                 task.id = taskObj.id;
                 task.completed = taskObj.completed;
