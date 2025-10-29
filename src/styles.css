@@ -90,30 +90,6 @@ body {
     margin-right: 5px;
 }
 
-.add-btn {
-    box-sizing: border-box;
-    height: 60%;
-    margin-left: 15px;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.add-project {
-    width: 60%;
-}
-
-.add-task {
-    width: 160px;
-}
-
-.add-icon {
-    height: 35px;
-    margin-right: 8px;
-}
-
 .proj-col-title {
     font-weight: 600;
 }
@@ -255,3 +231,35 @@ input[type="radio"]::before {
 input[type="radio"]:checked::before {
     transform: scale(1);
 }
+
+/* Button styling */
+.button-wrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.add-btn {
+    box-sizing: border-box;
+    height: 60%;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.add-project {
+    width: 60%;
+}
+
+.add-task {
+    width: 160px;
+}
+
+.add-icon {
+    height: 35px;
+    margin-right: 8px;
+}
+

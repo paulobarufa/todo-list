@@ -3,7 +3,12 @@ import taskIcon from "./images/task.svg"
 import checkIcon from "./images/check.svg"
 import todayIcon from "./images/today.svg"
 import upcomingIcon from "./images/upcoming.svg"
-import improtantIcon from "./images/important.svg"
+import importantIcon from "./images/important.svg"
+import addIcon from "./images/plus.svg"
+import saveIcon from "./images/save.svg"
+import cancelIcon from "./images/cancel.svg"
+import deleteIcon from "./images/delete.svg"
+import editIcon from "./images/edit.svg"
 
 export class HTMLwriter {
 
@@ -42,7 +47,7 @@ export class HTMLwriter {
         const colImportant = document.createElement("div")
         colImportant.classList.add("col-item", "important")
         const importantImg = document.createElement("img")
-        importantImg.src = improtantIcon;
+        importantImg.src = importantIcon;
         importantImg.classList.add("col-icon", "icon")
         colImportant.append(importantImg, document.createTextNode("Important"))
 
@@ -100,7 +105,6 @@ export class HTMLwriter {
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
-
 
         // Information objects
         const titleWrapper = document.createElement("div")
@@ -397,18 +401,172 @@ export class HTMLwriter {
     }
 
     static generateButtons(viewObj) {
+        // Button wrapper
+        const buttonWrapper = document.createElement("div")
+        buttonWrapper.classList.add("button-wrapper")
 
+        // Return empty for fixed views
+        if (viewObj.view >= 3) return buttonWrapper;
+        
+        // New task button
+        const newTask = document.createElement("div")
+        newTask.classList.add("add-task", "add-btn")
+        const addImg = document.createElement("img")
+        addImg.src = addIcon;
+        addImg.classList.add("add-icon icon")
+
+        newTask.append(addImg, document.createTextNode("New task"))
+
+        // Edit project button
+        const editProject = document.createElement("div")
+        editProject.classList.add("add-task", "add-btn")
+        const editImg = document.createElement("img")
+        editImg.src = editIcon;
+        editImg.classList.add("add-icon icon")
+
+        editProject.append(editImg, document.createTextNode("Edit project"))
+
+        // Mark completed button
+        const markCompleted = document.createElement("div")
+        markCompleted.classList.add("add-task", "add-btn")
+        const completedImg = document.createElement("img")
+        completedImg.src = checkIcon;
+        completedImg.classList.add("add-icon icon")
+
+        markCompleted.append(completedImg, document.createTextNode("Completed"))
+
+        // Delete project button
+        const deleteProject = document.createElement("div")
+        deleteProject.classList.add("add-task", "add-btn")
+        const deleteImg = document.createElement("img")
+        deleteImg.src = deleteIcon;
+        deleteImg.classList.add("add-icon icon")
+
+        deleteProject.append(deleteImg, document.createTextNode("Delete"))
+
+        // Cancel button
+        const cancelButton = document.createElement("div")
+        cancelButton.classList.add("add-task", "add-btn")
+        const cancelImg = document.createElement("img")
+        cancelImg.src = cancelIcon;
+        cancelImg.classList.add("add-icon icon")
+
+        cancelButton.append(cancelImg, document.createTextNode("Cancel"))
+
+        // Save button
+        const saveButton = document.createElement("div")
+        saveButton.classList.add("add-task", "add-btn")
+        const saveImg = document.createElement("img")
+        saveImg.src = saveIcon;
+        saveImg.classList.add("add-icon icon")
+
+        saveButton.append(saveImg, document.createTextNode("Save"))
+
+        // Project view
+        if (viewObj.view == 4) {
+            switch (viewObj.mode) {
+                case 1:
+                    // View mode
+                    buttonWrapper.append(newTask, editProject, markCompleted, deleteProject)
+                    break;
+
+                case 2:
+                    // New mode
+                    buttonWrapper.append(saveButton, cancelButton)
+                    break;
+
+                case 3:
+                    // Edit mode
+                    buttonWrapper.append(saveButton, cancelButton)
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+
+        // Task view
+        if (viewObj.view == 5) {
+            switch (viewObj.mode) {
+                case 1:
+                    // View mode
+                    buttonWrapper.append(markCompleted, editProject, deleteProject)
+                    break;
+
+                case 2:
+                    // New mode
+                    buttonWrapper.append(saveButton, cancelButton)
+                    break;
+
+                case 3:
+                    // Edit mode
+                    buttonWrapper.append(saveButton, cancelButton)
+                    break;
+            
+                default:
+                    break;
+            }
+        }
     }
 
-    static generateDueToday() {
+    static generateFixedView(tasks, view) {
+        // View Wrapper
+        const mainWrapper = document.createElement("div")
 
-    }
 
-    static generateUpcoming() {
+        // Information object
+        const titleWrapper = document.createElement("div")
+        titleWrapper.classList.add("main-title-wrapper")
 
-    }
+        const titleImg = document.createElement("img")
+        titleImg.classList.add("main-project-icon", "icon")
 
-    static generateImportant() {
+        const title = document.createElement("h1")
+        title.classList.add("project-title")
+
+        switch (view) {
+            case 1:
+                titleImg.src = todayIcon;
+                title.appendChild(document.createTextNode("Due today"))
+                break;
+
+            case 2:
+                titleImg.src = upcomingIcon;
+                title.appendChild(document.createTextNode("Upcoming"))
+                break;
+            case 3:
+                titleImg.src = important;
+                title.appendChild(document.createTextNode("Important"))
+                break;
+
+            default:
+                break;
+        }
+
+        titleWrapper.append(titleImg, title)
+
+        // Task objects
+        const taskWrapper = document.createElement("div")
+        taskWrapper.classList.add("task-wrapper")
+
+        for (const task of tasks) {
+
+            const taskDiv = document.createElement("div")
+            taskDiv.classList.add("proj-task")
+
+            const dateDiv = document.createElement("div")
+            dateDiv.classList.add("proj-task-date")
+
+            const taskImg = document.createElement("img")
+            taskImg.src = task.completed ? checkIcon : taskIcon;
+            taskImg.classList.add("project-task-icon", "icon")
+
+            dateDiv.append(taskImg, document.createTextNode(task.dueDate))
+
+            taskDiv.append(dateDiv, document.createTextNode(task.name))
+
+            taskWrapper.appendChild(taskDiv);
+        }
 
     }
 
