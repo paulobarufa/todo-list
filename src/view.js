@@ -18,8 +18,8 @@ Modes:
 export class ViewController {
 
     view = 1;
-    id = "";
     mode = 1;
+    id = "";
 
     constructor(projects) {
         this.projects = projects;
@@ -45,6 +45,30 @@ export class ViewController {
         return this.projects.find(obj => { return obj.projectid === projectid })
     }
 
+    getTask(taskid) {
+        for (let project of this.projects) {
+            for (let task of project.tasks) {
+                if (task.id == taskid) return task;
+            }
+        }
+    }
+
+    getDueToday() {
+
+    }
+
+    getUpcoming() {
+
+    }
+
+    getImportant() {
+
+    }
+
+    sortItems() {
+
+    }
+    
     updateView(e) {
         console.log(this.mode)
     }

@@ -396,4 +396,20 @@ export class HTMLwriter {
         return mainWrapper;
     }
 
+    static generateButtons(viewObj) {
+
+    }
+
+    static generateDueToday() {
+
+    }
+
+    static generateUpcoming() {
+
+    }
+
+    static generateImportant() {
+
+    }
+
 }
