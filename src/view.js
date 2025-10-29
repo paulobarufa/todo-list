@@ -17,8 +17,8 @@ Modes:
 
 export class ViewController {
 
-    view = 1;
-    mode = 1;
+    view = "1";
+    mode = "1";
     id = "";
 
     constructor(projects) {
@@ -27,22 +27,28 @@ export class ViewController {
         // Get wrappers
         this.leftPanel = document.querySelector(".left-panel");
         this.mainPanel = document.querySelector(".right-panel");
+        this.rightNav = document.querySelector(".right-nav");
+
+        // Clear Wrappers
+        this.mainPanel.innerHTML = "";
+        this.leftPanel.innerHTML = "";
+        this.rightNav.innerHTML = "";
 
         // Create views
         const colWrapper = HTMLwriter.generateCol(this);
         const viewWrapper = HTMLwriter.generateView(this);
-
-        // Clear Wrappers
-        //mainPanel.innerHTML = "";
-        this.leftPanel.innerHTML = "";
+        const buttonWrapper = HTMLwriter.generateButtons(this);
 
         //Append views
         this.leftPanel.appendChild(colWrapper);
         this.mainPanel.appendChild(viewWrapper);
+        this.rightNav.appendChild(buttonWrapper);
     }
 
     getProject(projectid) {
-        return this.projects.find(obj => { return obj.projectid === projectid })
+        for (let project of this.projects) {
+            if (project.id == projectid) return project
+        }
     }
 
     getTask(taskid) {
@@ -70,7 +76,25 @@ export class ViewController {
     }
     
     updateView(e) {
-        console.log(this.mode)
+        this.view = e.target.dataset.view;
+        this.mode = e.target.dataset.mode;
+        this.id = e.target.dataset.id;
+        
+        // Clear Wrappers
+        this.mainPanel.innerHTML = "";
+        this.leftPanel.innerHTML = "";
+        this.rightNav.innerHTML = "";
+        
+        // Create views
+        const colWrapper = HTMLwriter.generateCol(this);
+        const viewWrapper = HTMLwriter.generateView(this);
+        const buttonWrapper = HTMLwriter.generateButtons(this);
+        
+        //Append views
+        this.leftPanel.appendChild(colWrapper);
+        this.mainPanel.appendChild(viewWrapper);
+        this.rightNav.appendChild(buttonWrapper);
+
     }
     
 }

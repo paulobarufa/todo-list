@@ -35,6 +35,9 @@ export class HTMLwriter {
         todayImg.src = todayIcon;
         todayImg.classList.add("col-icon", "icon")
         colToday.append(todayImg, document.createTextNode("Due today"))
+        colToday.dataset.view = "1";
+        colToday.dataset.mode = "1";
+        colToday.dataset.id = "";
         colToday.addEventListener("click", (e) => viewObj.updateView(e))
 
         const colUpcoming = document.createElement("div")
@@ -42,14 +45,22 @@ export class HTMLwriter {
         const UpcomingImg = document.createElement("img")
         UpcomingImg.src = upcomingIcon;
         UpcomingImg.classList.add("col-icon", "icon")
+        colUpcoming.dataset.view = "2";
+        colUpcoming.dataset.mode = "1";
+        colUpcoming.dataset.id = "";
         colUpcoming.append(UpcomingImg, document.createTextNode("Upcoming"))
+        colUpcoming.addEventListener("click", (e) => viewObj.updateView(e))
 
         const colImportant = document.createElement("div")
         colImportant.classList.add("col-item", "important")
         const importantImg = document.createElement("img")
         importantImg.src = importantIcon;
         importantImg.classList.add("col-icon", "icon")
+        colImportant.dataset.view = "3";
+        colImportant.dataset.mode = "1";
+        colImportant.dataset.id = "";
         colImportant.append(importantImg, document.createTextNode("Important"))
+        colImportant.addEventListener("click", (e) => viewObj.updateView(e))
 
         fixedWrapper.append(colToday, colUpcoming, colImportant)
 
@@ -68,6 +79,10 @@ export class HTMLwriter {
             projImage.classList.add("col-icon", "icon");
 
             projDiv.append(projImage, projTitle);
+            projDiv.dataset.view = "4";
+            projDiv.dataset.mode = "1";
+            projDiv.dataset.id = project.id;
+            projDiv.addEventListener("click", (e) => viewObj.updateView(e))
 
             dynamicWrapper.appendChild(projDiv);
 
@@ -83,6 +98,11 @@ export class HTMLwriter {
                 
                 taskDiv.append(taskImg, taskTitle);
 
+                taskDiv.dataset.view = "5";
+                taskDiv.dataset.mode = "1";
+                taskDiv.dataset.id = task.id;
+                taskDiv.addEventListener("click", (e) => viewObj.updateView(e))
+
                 dynamicWrapper.appendChild(taskDiv);
             }
         }
@@ -95,13 +115,39 @@ export class HTMLwriter {
 
     static generateView(viewObj) {
 
+        switch (viewObj.view) {
+            case "1":
+                const today = viewObj.projects[0].tasks
+                return HTMLwriter.generateFixedView(today, "1")
+                break;
 
-        return HTMLwriter.generateTaskEdit(viewObj)
+            case "2":
+                const upcoming = viewObj.projects[0].tasks
+                return HTMLwriter.generateFixedView(upcoming, "2")
+                break;
+
+            case "3":
+                const important = viewObj.projects[0].tasks
+                return HTMLwriter.generateFixedView(important, "3")
+                break;
+
+            case "4":
+                const project = viewObj.getProject(viewObj.id)
+                return HTMLwriter.generateProjectView(project)
+                break;
+
+            case "5":
+                const task = viewObj.getTask(viewObj.id)
+                return HTMLwriter.generateTaskView(task)
+                break;
+        
+            default:
+                break;
+        }
 
     }
 
     static generateProjectView(project) {
-
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
@@ -401,19 +447,21 @@ export class HTMLwriter {
     }
 
     static generateButtons(viewObj) {
+        console.log(viewObj.view)
+        console.log(viewObj.mode)
         // Button wrapper
         const buttonWrapper = document.createElement("div")
         buttonWrapper.classList.add("button-wrapper")
 
         // Return empty for fixed views
-        if (viewObj.view >= 3) return buttonWrapper;
+        if (viewObj.view <= 3) return buttonWrapper;
         
         // New task button
         const newTask = document.createElement("div")
         newTask.classList.add("add-task", "add-btn")
         const addImg = document.createElement("img")
         addImg.src = addIcon;
-        addImg.classList.add("add-icon icon")
+        addImg.classList.add("add-icon", "icon")
 
         newTask.append(addImg, document.createTextNode("New task"))
 
@@ -422,16 +470,25 @@ export class HTMLwriter {
         editProject.classList.add("add-task", "add-btn")
         const editImg = document.createElement("img")
         editImg.src = editIcon;
-        editImg.classList.add("add-icon icon")
+        editImg.classList.add("add-icon", "icon")
 
         editProject.append(editImg, document.createTextNode("Edit project"))
+
+        // Edit task button
+        const editTask = document.createElement("div")
+        editTask.classList.add("add-task", "add-btn")
+        const editTaskImg = document.createElement("img")
+        editTaskImg.src = editIcon;
+        editTaskImg.classList.add("add-icon", "icon")
+
+        editTask.append(editTaskImg, document.createTextNode("Edit task"))
 
         // Mark completed button
         const markCompleted = document.createElement("div")
         markCompleted.classList.add("add-task", "add-btn")
         const completedImg = document.createElement("img")
         completedImg.src = checkIcon;
-        completedImg.classList.add("add-icon icon")
+        completedImg.classList.add("add-icon", "icon")
 
         markCompleted.append(completedImg, document.createTextNode("Completed"))
 
@@ -440,7 +497,7 @@ export class HTMLwriter {
         deleteProject.classList.add("add-task", "add-btn")
         const deleteImg = document.createElement("img")
         deleteImg.src = deleteIcon;
-        deleteImg.classList.add("add-icon icon")
+        deleteImg.classList.add("add-icon", "icon")
 
         deleteProject.append(deleteImg, document.createTextNode("Delete"))
 
@@ -449,7 +506,7 @@ export class HTMLwriter {
         cancelButton.classList.add("add-task", "add-btn")
         const cancelImg = document.createElement("img")
         cancelImg.src = cancelIcon;
-        cancelImg.classList.add("add-icon icon")
+        cancelImg.classList.add("add-icon", "icon")
 
         cancelButton.append(cancelImg, document.createTextNode("Cancel"))
 
@@ -458,24 +515,24 @@ export class HTMLwriter {
         saveButton.classList.add("add-task", "add-btn")
         const saveImg = document.createElement("img")
         saveImg.src = saveIcon;
-        saveImg.classList.add("add-icon icon")
+        saveImg.classList.add("add-icon", "icon")
 
         saveButton.append(saveImg, document.createTextNode("Save"))
 
         // Project view
-        if (viewObj.view == 4) {
+        if (viewObj.view == "4") {
             switch (viewObj.mode) {
-                case 1:
+                case "1":
                     // View mode
                     buttonWrapper.append(newTask, editProject, markCompleted, deleteProject)
                     break;
 
-                case 2:
+                case "2":
                     // New mode
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
 
-                case 3:
+                case "3":
                     // Edit mode
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
@@ -486,19 +543,19 @@ export class HTMLwriter {
         }
 
         // Task view
-        if (viewObj.view == 5) {
+        if (viewObj.view == "5") {
             switch (viewObj.mode) {
-                case 1:
+                case "1":
                     // View mode
-                    buttonWrapper.append(markCompleted, editProject, deleteProject)
+                    buttonWrapper.append(markCompleted, editTask, deleteProject)
                     break;
 
-                case 2:
+                case "2":
                     // New mode
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
 
-                case 3:
+                case "3":
                     // Edit mode
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
@@ -507,6 +564,8 @@ export class HTMLwriter {
                     break;
             }
         }
+
+        return buttonWrapper;
     }
 
     static generateFixedView(tasks, view) {
@@ -525,17 +584,17 @@ export class HTMLwriter {
         title.classList.add("project-title")
 
         switch (view) {
-            case 1:
+            case "1":
                 titleImg.src = todayIcon;
                 title.appendChild(document.createTextNode("Due today"))
                 break;
 
-            case 2:
+            case "2":
                 titleImg.src = upcomingIcon;
                 title.appendChild(document.createTextNode("Upcoming"))
                 break;
-            case 3:
-                titleImg.src = important;
+            case "3":
+                titleImg.src = importantIcon;
                 title.appendChild(document.createTextNode("Important"))
                 break;
 
@@ -567,6 +626,10 @@ export class HTMLwriter {
 
             taskWrapper.appendChild(taskDiv);
         }
+
+        mainWrapper.append(titleWrapper, taskWrapper)
+
+        return mainWrapper;
 
     }
 

@@ -19,10 +19,6 @@ const viewController = new ViewController(projArray);
 
 
 
-
-
-
-
 /*
 let proj1 = new Project("First Project", "This is the first project.", "notes notes notes", "1 week");
 
@@ -41,4 +37,6 @@ let task5 = new Task("Task 2", "Task task task", "random notes", "tmrw", proj2.i
 
 proj2.addTask(task4)
 proj2.addTask(task5)
+
+StorageWriter.setStorage([proj1, proj2])
 */

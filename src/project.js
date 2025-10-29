@@ -1,7 +1,6 @@
 export class Project {
 
     tasks = [];
-    completed = false;
 
     constructor(name, description, notes, dueDate) {
         this.name = name;
@@ -9,6 +8,7 @@ export class Project {
         this.id = crypto.randomUUID();
         this.notes = notes;
         this.dueDate = dueDate;
+        this.completed = false;
     }
 
     addTask(task) {
