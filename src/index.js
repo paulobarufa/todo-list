@@ -6,27 +6,12 @@ import { StorageWriter } from "./storage";
 import { HTMLwriter } from "./HTMLwriter";
 import { ViewController } from "./view";
 
-// Get wrappers
-const leftPanel = document.querySelector(".left-panel");
-const mainPanel = document.querySelector(".right-panel");
-
 // Get project Array from storage
 const projArray = StorageWriter.getStorage();
 
 // Create viewController
 const viewController = new ViewController(projArray);
 
-// Create views
-const colWrapper = HTMLwriter.generateCol(projArray);
-const viewWrapper = HTMLwriter.generateView(viewController);
-
-// Clear Wrappers
-//mainPanel.innerHTML = "";
-leftPanel.innerHTML = "";
-
-//Append views
-leftPanel.appendChild(colWrapper);
-mainPanel.appendChild(viewWrapper);
 
 
 

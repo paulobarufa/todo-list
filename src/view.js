@@ -1,3 +1,4 @@
+import { HTMLwriter } from "./HTMLwriter";
 /* 
 Represent application state.
 
@@ -17,15 +18,35 @@ Modes:
 export class ViewController {
 
     view = 1;
-    mode = 1;
     id = "";
+    mode = 1;
 
     constructor(projects) {
         this.projects = projects;
+
+        // Get wrappers
+        this.leftPanel = document.querySelector(".left-panel");
+        this.mainPanel = document.querySelector(".right-panel");
+
+        // Create views
+        const colWrapper = HTMLwriter.generateCol(this);
+        const viewWrapper = HTMLwriter.generateView(this);
+
+        // Clear Wrappers
+        //mainPanel.innerHTML = "";
+        this.leftPanel.innerHTML = "";
+
+        //Append views
+        this.leftPanel.appendChild(colWrapper);
+        this.mainPanel.appendChild(viewWrapper);
     }
 
-    updateView() {
-        
+    getProject(projectid) {
+        return this.projects.find(obj => { return obj.projectid === projectid })
+    }
+
+    updateView(e) {
+        console.log(this.mode)
     }
     
 }

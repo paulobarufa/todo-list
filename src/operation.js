@@ -9,11 +9,36 @@ export class OperationManager {
         this.viewController = viewController;
     }
 
-    newTask() {
+    newTask(projectid) {
+
+        const taskTitle = document.querySelector("#input-task-title").value
+        const taskDescription = document.querySelector("#input-task-description").value
+        const taskDate = document.querySelector("#input-task-date").value
+        const taskNotes = document.querySelector("#input-task-notes").value
+        const taskPriority = document.querySelector('input[name=task-priority]:checked').value
+
+        const project = this.viewController.getProject(projectid)
+
+        const newTask = new Task(taskTitle, taskDescription, taskNotes, taskDate, projectid, taskPriority)
+        project.addTask(newTask)
+
+        return newTask.id;
 
     }
 
-    saveTask() {
+    saveTask(taskid) {
+        const taskTitle = document.querySelector("#input-task-title").value
+        const taskDescription = document.querySelector("#input-task-description").value
+        const taskDate = document.querySelector("#input-task-date").value
+        const taskNotes = document.querySelector("#input-task-notes").value
+        const taskPriority = document.querySelector('input[name=task-priority]:checked').value
+
+        const project = this.viewController.getProject(projectid)
+
+        const newTask = new Task(taskTitle, taskDescription, taskNotes, taskDate, projectid, taskPriority)
+        project.addTask(newTask)
+
+        return newTask.id;
 
     }
 
@@ -31,7 +56,15 @@ export class OperationManager {
     }
 
     newProject() {
+        const projectTitle = document.querySelector("#input-project-title").value
+        const projectDescription = document.querySelector("#input-project-description").value
+        const projectDate = document.querySelector("#input-project-date").value
+        const projectNotes = document.querySelector("#input-project-notes").value
 
+        const project = new Project(projectTitle, projectDescription, projectNotes, projectDate)
+        this.viewController.projects.push(project)
+
+        return project.id;
     }
 
     saveProject() {

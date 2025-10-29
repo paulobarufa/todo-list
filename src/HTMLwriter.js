@@ -7,7 +7,7 @@ import improtantIcon from "./images/important.svg"
 
 export class HTMLwriter {
 
-    static generateCol(projArray) {
+    static generateCol(viewObj) {
 
         // Main wrapper
         const wrapperPanel = document.createElement("div")
@@ -30,6 +30,7 @@ export class HTMLwriter {
         todayImg.src = todayIcon;
         todayImg.classList.add("col-icon", "icon")
         colToday.append(todayImg, document.createTextNode("Due today"))
+        colToday.addEventListener("click", (e) => viewObj.updateView(e))
 
         const colUpcoming = document.createElement("div")
         colUpcoming.classList.add("col-item", "upcoming")
@@ -51,7 +52,7 @@ export class HTMLwriter {
         const dynamicWrapper = document.createElement("div");
         dynamicWrapper.classList.add("dynamic-wrapper")
 
-        for (const project of projArray) {
+        for (const project of viewObj.projects) {
             const projDiv = document.createElement("div");
             projDiv.classList.add("col-item", "proj-col-title");
 
@@ -90,7 +91,7 @@ export class HTMLwriter {
     static generateView(viewObj) {
 
 
-        return HTMLwriter.generateTaskEdit()
+        return HTMLwriter.generateTaskEdit(viewObj)
 
     }
 
