@@ -30,6 +30,7 @@ export class HTMLwriter {
         fixedWrapper.classList.add("fixed-wrapper")
 
         const colToday = document.createElement("div")
+        if (viewObj.view == "1") colToday.classList.add("col-selected")
         colToday.classList.add("col-item", "today")
         const todayImg = document.createElement("img")
         todayImg.src = todayIcon;
@@ -41,6 +42,7 @@ export class HTMLwriter {
         colToday.addEventListener("click", (e) => viewObj.updateView(e))
 
         const colUpcoming = document.createElement("div")
+        if (viewObj.view == "2") colUpcoming.classList.add("col-selected")
         colUpcoming.classList.add("col-item", "upcoming")
         const UpcomingImg = document.createElement("img")
         UpcomingImg.src = upcomingIcon;
@@ -52,6 +54,7 @@ export class HTMLwriter {
         colUpcoming.addEventListener("click", (e) => viewObj.updateView(e))
 
         const colImportant = document.createElement("div")
+        if (viewObj.view == "3") colImportant.classList.add("col-selected")
         colImportant.classList.add("col-item", "important")
         const importantImg = document.createElement("img")
         importantImg.src = importantIcon;
@@ -71,6 +74,7 @@ export class HTMLwriter {
         for (const project of viewObj.projects) {
             const projDiv = document.createElement("div");
             projDiv.classList.add("col-item", "proj-col-title");
+            if (viewObj.id == project.id) projDiv.classList.add("col-selected")
 
             const projTitle = document.createTextNode(project.name);
 
@@ -88,6 +92,7 @@ export class HTMLwriter {
 
             for (const task of project.tasks) {
                 const taskDiv = document.createElement("div");
+                if (viewObj.id == task.id) taskDiv.classList.add("col-selected")
                 taskDiv.classList.add("col-item", "task-col-title");
 
                 const taskTitle = document.createTextNode(task.name);
@@ -133,7 +138,7 @@ export class HTMLwriter {
 
             case "4":
                 const project = viewObj.getProject(viewObj.id)
-                return HTMLwriter.generateProjectView(project)
+                return HTMLwriter.generateProjectView(viewObj, project)
                 break;
 
             case "5":
@@ -147,7 +152,7 @@ export class HTMLwriter {
 
     }
 
-    static generateProjectView(project) {
+    static generateProjectView(viewObj, project) {
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
@@ -206,6 +211,11 @@ export class HTMLwriter {
             dateDiv.append(taskImg, document.createTextNode(task.dueDate))
 
             taskDiv.append(dateDiv, document.createTextNode(task.name))
+
+            taskDiv.dataset.view = "5";
+            taskDiv.dataset.mode = "1";
+            taskDiv.dataset.id = task.id;
+            taskDiv.addEventListener("click", (e) => viewObj.updateView(e))
 
             taskWrapper.appendChild(taskDiv);
         }
@@ -470,7 +480,7 @@ export class HTMLwriter {
         editProject.classList.add("add-task", "add-btn")
         const editImg = document.createElement("img")
         editImg.src = editIcon;
-        editImg.classList.add("add-icon", "icon")
+        editImg.classList.add("add-icon", "icon", "min-icon")
 
         editProject.append(editImg, document.createTextNode("Edit project"))
 
@@ -479,7 +489,7 @@ export class HTMLwriter {
         editTask.classList.add("add-task", "add-btn")
         const editTaskImg = document.createElement("img")
         editTaskImg.src = editIcon;
-        editTaskImg.classList.add("add-icon", "icon")
+        editTaskImg.classList.add("add-icon", "icon", "min-icon")
 
         editTask.append(editTaskImg, document.createTextNode("Edit task"))
 
@@ -488,7 +498,7 @@ export class HTMLwriter {
         markCompleted.classList.add("add-task", "add-btn")
         const completedImg = document.createElement("img")
         completedImg.src = checkIcon;
-        completedImg.classList.add("add-icon", "icon")
+        completedImg.classList.add("add-icon", "icon", "min-icon")
 
         markCompleted.append(completedImg, document.createTextNode("Completed"))
 
@@ -497,7 +507,7 @@ export class HTMLwriter {
         deleteProject.classList.add("add-task", "add-btn")
         const deleteImg = document.createElement("img")
         deleteImg.src = deleteIcon;
-        deleteImg.classList.add("add-icon", "icon")
+        deleteImg.classList.add("add-icon", "icon", "min-icon")
 
         deleteProject.append(deleteImg, document.createTextNode("Delete"))
 
