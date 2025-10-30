@@ -1,5 +1,6 @@
 import { Project } from "./project";
 import { Task } from "./task";
+import { parseISO } from "date-fns";
 
 export class StorageWriter {
     
@@ -9,23 +10,26 @@ export class StorageWriter {
 
         let projectList = [];
 
-        for (const projectObj of projectListObject) {
-            let project = new Project(projectObj.name, projectObj.description, projectObj.notes, projectObj.dueDate)
+        if (projectListObject) {
+            for (const projectObj of projectListObject) {
+                let project = new Project(projectObj.name, projectObj.description, projectObj.notes, parseISO(projectObj.dueDate))
 
-            project.completed = projectObj.completed;
-            project.id = projectObj.id;
+                project.completed = projectObj.completed;
+                project.id = projectObj.id;
 
-            for (const taskObj of projectObj.tasks) {
-                let task = new Task(taskObj.name, taskObj.description, taskObj.notes, taskObj.dueDate, taskObj.projectid, taskObj.priority);
+                for (const taskObj of projectObj.tasks) {
 
-                task.id = taskObj.id;
-                task.completed = taskObj.completed;
+                    let task = new Task(taskObj.name, taskObj.description, taskObj.notes, parseISO(taskObj.dueDate), taskObj.projectid, taskObj.priority);
 
-                project.tasks.push(task);
+                    task.id = taskObj.id;
+                    task.completed = taskObj.completed;
+
+                    project.tasks.push(task);
+                }
+
+                projectList.push(project);
+
             }
-
-            projectList.push(project);
-
         }
 
         return projectList;

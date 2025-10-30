@@ -9,6 +9,7 @@ import saveIcon from "./images/save.svg"
 import cancelIcon from "./images/cancel.svg"
 import deleteIcon from "./images/delete.svg"
 import editIcon from "./images/edit.svg"
+import { addDays, formatRelative } from "date-fns"
 
 export class HTMLwriter {
 
@@ -181,7 +182,8 @@ export class HTMLwriter {
 
         const dueDate = document.createElement("p")
         dueDate.classList.add("due-date")
-        dueDate.appendChild(document.createTextNode(project.dueDate))
+        const dateString = "Due " + formatRelative(project.dueDate, new Date()).split(' at ')[0]
+        dueDate.appendChild(document.createTextNode(dateString))
 
         const notesHeader = document.createElement("h2")
         notesHeader.classList.add("main-header")
@@ -210,8 +212,8 @@ export class HTMLwriter {
             const taskImg = document.createElement("img")
             taskImg.src = task.completed ? checkIcon : taskIcon;
             taskImg.classList.add("project-task-icon", "icon")
-
-            dateDiv.append(taskImg, document.createTextNode(task.dueDate))
+            const dateTaskString = "Due " + formatRelative(task.dueDate, new Date()).split(' at ')[0]
+            dateDiv.append(taskImg, document.createTextNode(dateTaskString))
 
             taskDiv.append(dateDiv, document.createTextNode(task.name))
 
@@ -257,7 +259,8 @@ export class HTMLwriter {
 
         const dueDate = document.createElement("p")
         dueDate.classList.add("due-date")
-        dueDate.appendChild(document.createTextNode(task.dueDate))
+        const dateTaskString = "Due " + formatRelative(task.dueDate, new Date()).split(' at ')[0]
+        dueDate.appendChild(document.createTextNode(dateTaskString))
 
         const notesHeader = document.createElement("h2")
         notesHeader.classList.add("main-header")
@@ -352,7 +355,7 @@ export class HTMLwriter {
             inputTitle.value = project.name;
             inputDescription.value = project.description;
             inputNotes.value = project.notes;
-            inputDate.value = project.date;
+            inputDate.valueAsDate = project.dueDate;
         }
 
         return mainWrapper;
@@ -474,7 +477,7 @@ export class HTMLwriter {
             inputTitle.value = task.name;
             inputDescription.value = task.description;
             inputNotes.value = task.notes;
-            inputDate.value = task.date;
+            inputDate.valueAsDate = task.date;
             inputRadioStandard.checked = task.important ? 0 : 1;
             inputRadioImportant.checked = task.important ? 1 : 0;
         }

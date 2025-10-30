@@ -1,6 +1,7 @@
 import { HTMLwriter } from "./HTMLwriter";
 import { OperationManager } from "./operation";
 import { StorageWriter } from "./storage";
+import { compareAsc } from "date-fns";
 /* 
 Represent application state.
 
@@ -82,10 +83,15 @@ export class ViewController {
     }
 
     sortItems() {
-
+        this.projects = this.projects.sort((a, b) => a.dueDate - b.dueDate)
+        for (let project of this.projects) {
+            project.tasks.sort((a, b) => a.dueDate - b.dueDate)
+        }
     }
     
     updateView(e) {
+        
+        this.sortItems()
         
         if (e instanceof Event) {
             this.view = e.target.dataset.view;

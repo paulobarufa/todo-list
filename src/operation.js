@@ -13,7 +13,7 @@ export class OperationManager {
 
         const taskTitle = document.querySelector("#input-task-title").value
         const taskDescription = document.querySelector("#input-task-description").value
-        const taskDate = document.querySelector("#input-task-date").value
+        const taskDate = new Date(document.querySelector("#input-task-date").value)
         const taskNotes = document.querySelector("#input-task-notes").value
         const taskPriority = document.querySelector('input[name=task-priority]:checked').value
 
@@ -37,7 +37,7 @@ export class OperationManager {
 
         task.name = document.querySelector("#input-task-title").value
         task.description = document.querySelector("#input-task-description").value
-        task.dueDate = document.querySelector("#input-task-date").value
+        task.dueDate = new Date(document.querySelector("#input-task-date").value)
         task.notes = document.querySelector("#input-task-notes").value
         task.priority = document.querySelector('input[name=task-priority]:checked').value
 
@@ -69,7 +69,7 @@ export class OperationManager {
     newProject() {
         const projectTitle = document.querySelector("#input-project-title").value
         const projectDescription = document.querySelector("#input-project-description").value
-        const projectDate = document.querySelector("#input-project-date").value
+        const projectDate = new Date(document.querySelector("#input-project-date").value)
         const projectNotes = document.querySelector("#input-project-notes").value
 
         const project = new Project(projectTitle, projectDescription, projectNotes, projectDate)
@@ -89,7 +89,7 @@ export class OperationManager {
 
         project.name = document.querySelector("#input-project-title").value
         project.description = document.querySelector("#input-project-description").value
-        project.dueDate = document.querySelector("#input-project-date").value
+        project.dueDate = new Date(document.querySelector("#input-project-date").value)
         project.notes = document.querySelector("#input-project-notes").value
 
         StorageWriter.setStorage(this.viewController.projects)
