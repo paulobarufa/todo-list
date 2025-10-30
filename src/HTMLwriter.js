@@ -124,28 +124,31 @@ export class HTMLwriter {
             case "1":
                 const today = viewObj.projects[0].tasks
                 return HTMLwriter.generateFixedView(today, "1")
-                break;
 
             case "2":
                 const upcoming = viewObj.projects[0].tasks
                 return HTMLwriter.generateFixedView(upcoming, "2")
-                break;
 
             case "3":
                 const important = viewObj.projects[0].tasks
                 return HTMLwriter.generateFixedView(important, "3")
-                break;
 
             case "4":
                 const project = viewObj.getProject(viewObj.id)
-                return HTMLwriter.generateProjectView(viewObj, project)
-                break;
+                if (viewObj.mode == "1") {
+                    return HTMLwriter.generateProjectView(viewObj, project)
+                } else {
+                    return HTMLwriter.generateProjectEdit(viewObj, project)
+                }
 
             case "5":
                 const task = viewObj.getTask(viewObj.id)
-                return HTMLwriter.generateTaskView(task)
-                break;
-        
+                if (viewObj.mode == "1") {
+                    return HTMLwriter.generateTaskView(viewObj, task)
+                } else {
+                    return HTMLwriter.generateTaskEdit(viewObj, task)
+                }
+
             default:
                 break;
         }
@@ -228,7 +231,7 @@ export class HTMLwriter {
 
     }
 
-    static generateTaskView(task) {
+    static generateTaskView(viewObj, task) {
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
@@ -270,7 +273,7 @@ export class HTMLwriter {
         return mainWrapper;
     }
 
-    static generateProjectEdit() {
+    static generateProjectEdit(viewObj, project) {
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
@@ -281,7 +284,8 @@ export class HTMLwriter {
 
         const formHeader = document.createElement("h1")
         formHeader.classList.add("project-title")
-        formHeader.append(document.createTextNode("New Project"))
+        const headerNode = viewObj.mode == "3" ? "Edit project" : "New project"
+        formHeader.append(document.createTextNode(headerNode))
 
         // Title fieldset
         const fieldsetTitle = document.createElement("fieldset")
@@ -339,10 +343,18 @@ export class HTMLwriter {
         formObject.append(formHeader, fieldsetTitle, fieldsetDescription, fieldsetDate, fieldsetNotes);
         mainWrapper.append(formObject);
 
+        // Set values if editing
+        if (viewObj.mode == "3") {
+            inputTitle.value = project.name;
+            inputDescription.value = project.description;
+            inputNotes.value = project.notes;
+            inputDate.value = project.date;
+        }
+
         return mainWrapper;
     }
 
-    static generateTaskEdit() {
+    static generateTaskEdit(viewObj, task) {
 
         // View Wrapper
         const mainWrapper = document.createElement("div")
@@ -453,12 +465,20 @@ export class HTMLwriter {
         formObject.append(formHeader, fieldsetTitle, fieldsetDescription, fieldsetDate, fieldsetNotes, fieldsetPriority);
         mainWrapper.append(formObject);
 
+        // Set values if editing
+        if (viewObj.mode == "3") {
+            inputTitle.value = task.name;
+            inputDescription.value = task.description;
+            inputNotes.value = task.notes;
+            inputDate = task.date;
+            inputRadioStandard.checked = task.important ? 0 : 1;
+            inputRadioImportant.checked = task.important ? 1 : 0;
+        }
+
         return mainWrapper;
     }
 
     static generateButtons(viewObj) {
-        console.log(viewObj.view)
-        console.log(viewObj.mode)
         // Button wrapper
         const buttonWrapper = document.createElement("div")
         buttonWrapper.classList.add("button-wrapper")
@@ -534,11 +554,52 @@ export class HTMLwriter {
             switch (viewObj.mode) {
                 case "1":
                     // View mode
+                    newTask.dataset.view = "5";
+                    newTask.dataset.mode = "2";
+                    newTask.dataset.id = viewObj.id;
+                    
+                    newTask.addEventListener("click", (e) => viewObj.updateView(e))
+
+
+                    editProject.dataset.view = "4";
+                    editProject.dataset.mode = "3";
+                    editProject.dataset.id = viewObj.id;
+
+                    editProject.addEventListener("click", (e) => viewObj.updateView(e))
+
+
+                    markCompleted.dataset.view = "4";
+                    markCompleted.dataset.mode = "1";
+                    markCompleted.dataset.id = viewObj.id;
+
+                    markCompleted.addEventListener("click", (e) => {
+                        viewObj.getProject(viewObj.id).markCompleted()
+                        viewObj.updateView(e)
+                    })
+
+                    deleteProject.addEventListener("click", (e) => {
+                        if (window.confirm("Are you sure you want to delete project?")) {
+                            viewObj.deleteObject(viewObj.view, viewObj.id)
+                        }
+                    })
+
                     buttonWrapper.append(newTask, editProject, markCompleted, deleteProject)
                     break;
 
                 case "2":
                     // New mode
+                    saveButton.addEventListener("click", (e) => {
+                        viewObj.saveChanges(viewObj.view, viewObj.mode)
+                    })
+
+                    cancelButton.dataset.view = "1";
+                    cancelButton.dataset.mode = "1";
+                    cancelButton.dataset.id = "";
+
+                    cancelButton.addEventListener("click", (e) => {
+                        viewObj.updateView(e)
+                    })
+
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
 
