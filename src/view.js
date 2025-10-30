@@ -1,5 +1,6 @@
 import { HTMLwriter } from "./HTMLwriter";
 import { OperationManager } from "./operation";
+import { StorageWriter } from "./storage";
 /* 
 Represent application state.
 
@@ -47,6 +48,11 @@ export class ViewController {
         this.rightNav.appendChild(buttonWrapper);
 
         // Event listener for create project
+        const createProject = document.querySelector(".add-project")
+        createProject.dataset.view = "4";
+        createProject.dataset.mode = "2";
+        createProject.dataset.id = "";
+        createProject.addEventListener("click", (e) => this.updateView(e))
     }
 
     getProject(projectid) {
@@ -81,7 +87,7 @@ export class ViewController {
     
     updateView(e) {
         
-        if (e.target) {
+        if (e instanceof Event) {
             this.view = e.target.dataset.view;
             this.mode = e.target.dataset.mode;
             this.id = e.target.dataset.id;
@@ -117,7 +123,7 @@ export class ViewController {
         } else if (objectType == "5") {
 
             const projectId = this.getTask(objectId).projectid
-            this.operationManager.deleteTask(objectId)
+            this.operationManager.deleteTask(projectId, objectId)
             this.view = "4";
             this.mode = "1";
             this.id = projectId;
@@ -128,21 +134,34 @@ export class ViewController {
     }
 
     saveChanges(objectType, objectMode) {
-
         // New project
-        if (objectType == "4" && objectMode == "2") this.operationManager.newProject();
+        if (objectType == "4" && objectMode == "2") {
+            this.id = this.operationManager.newProject();
+        }
 
         // Edit project
-        if (objectType == "4" && objectMode == "3") this.operationManager.saveProject(this.id);
+        if (objectType == "4" && objectMode == "3") {
+            this.id = this.operationManager.saveProject(this.id);
+        }
 
         // New task
-        if (objectType == "5" && objectMode == "2") this.operationManager.newTask(this.id);
+        if (objectType == "5" && objectMode == "2") {
+            this.id = this.operationManager.newTask(this.id);
+        }
 
         // Edit task
-        if (objectType == "4" && objectMode == "3") this.operationManager.saveTask(this.id);
+        if (objectType == "5" && objectMode == "3") {
+            this.id = this.operationManager.saveTask(this.id);
+        }
 
         this.updateView()
 
     }
     
+    markCompleted(objectType, objectId) {
+        if (objectType == "4") this.getProject(objectId).markCompleted();
+        if (objectType == "5") this.getTask(objectId).markCompleted();
+        StorageWriter.setStorage(this.projects)
+        this.updateView()
+    }
 }

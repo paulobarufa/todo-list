@@ -24,9 +24,9 @@ export class OperationManager {
 
         StorageWriter.setStorage(this.viewController.projects)
 
-        this.viewController.view = 5;
-        this.viewController.mode = 1;
-        this.id = projectid;
+        this.viewController.view = "5";
+        this.viewController.mode = "1";
+        this.id = newTask.id;
 
         return newTask.id;
 
@@ -43,9 +43,9 @@ export class OperationManager {
 
         StorageWriter.setStorage(this.viewController.projects)
 
-        this.viewController.view = 5;
-        this.viewController.mode = 1;
-        this.id = projectid;
+        this.viewController.view = "5";
+        this.viewController.mode = "1";
+        this.id = taskid;
 
         return task.id;
 
@@ -53,14 +53,16 @@ export class OperationManager {
 
     deleteTask(projectid, taskid) {
 
-        const project = this.viewController.projects.find(obj => { return obj.projectid === projectid })
+        const project = this.viewController.getProject(projectid)
         project.removeTask(taskid)
 
         StorageWriter.setStorage(this.viewController.projects)
 
-        this.viewController.view = 4;
-        this.viewController.mode = 1;
+        this.viewController.view = "4";
+        this.viewController.mode = "1";
         this.id = projectid;
+
+        return projectid;
 
     }
 
@@ -73,8 +75,10 @@ export class OperationManager {
         const project = new Project(projectTitle, projectDescription, projectNotes, projectDate)
         this.viewController.projects.push(project)
 
-        this.viewController.view = 4;
-        this.viewController.mode = 1;
+        StorageWriter.setStorage(this.viewController.projects)
+
+        this.viewController.view = "4";
+        this.viewController.mode = "1";
         this.id = project.id;
 
         return project.id;
@@ -90,8 +94,8 @@ export class OperationManager {
 
         StorageWriter.setStorage(this.viewController.projects)
 
-        this.viewController.view = 4;
-        this.viewController.mode = 1;
+        this.viewController.view = "4";
+        this.viewController.mode = "1";
         this.id = project.id;
 
         return project.id;
@@ -107,6 +111,7 @@ export class OperationManager {
         this.viewController.mode = 1;
         this.id = "";
 
+        return "";
     }
 
 }

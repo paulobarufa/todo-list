@@ -289,6 +289,7 @@ export class HTMLwriter {
 
         // Title fieldset
         const fieldsetTitle = document.createElement("fieldset")
+        fieldsetTitle.classList.add("fieldset-form")
         const labelTitle = document.createElement("label")
         labelTitle.classList.add("form-label")
         labelTitle.htmlFor = "form-project-title";
@@ -302,6 +303,7 @@ export class HTMLwriter {
 
         // Description fieldset
         const fieldsetDescription = document.createElement("fieldset")
+        fieldsetDescription.classList.add("fieldset-form")
         const labelDescription = document.createElement("label")
         labelDescription.classList.add("form-label")
         labelDescription.htmlFor = "form-project-description";
@@ -315,6 +317,7 @@ export class HTMLwriter {
 
         // Date fieldset
         const fieldsetDate = document.createElement("fieldset")
+        fieldsetDate.classList.add("fieldset-form")
         const labelDate = document.createElement("label")
         labelDate.classList.add("form-label")
         labelDate.htmlFor = "form-project-date";
@@ -328,6 +331,7 @@ export class HTMLwriter {
 
         // Notes fieldset
         const fieldsetNotes = document.createElement("fieldset")
+        fieldsetNotes.classList.add("fieldset-form")
         const labelNotes = document.createElement("label")
         labelNotes.classList.add("form-label")
         labelNotes.htmlFor = "form-project-notes";
@@ -470,7 +474,7 @@ export class HTMLwriter {
             inputTitle.value = task.name;
             inputDescription.value = task.description;
             inputNotes.value = task.notes;
-            inputDate = task.date;
+            inputDate.value = task.date;
             inputRadioStandard.checked = task.important ? 0 : 1;
             inputRadioImportant.checked = task.important ? 1 : 0;
         }
@@ -573,8 +577,7 @@ export class HTMLwriter {
                     markCompleted.dataset.id = viewObj.id;
 
                     markCompleted.addEventListener("click", (e) => {
-                        viewObj.getProject(viewObj.id).markCompleted()
-                        viewObj.updateView(e)
+                        viewObj.markCompleted(viewObj.view, viewObj.id)
                     })
 
                     deleteProject.addEventListener("click", (e) => {
@@ -583,7 +586,8 @@ export class HTMLwriter {
                         }
                     })
 
-                    buttonWrapper.append(newTask, editProject, markCompleted, deleteProject)
+                    buttonWrapper.append(newTask, editProject, deleteProject)
+                    if (!viewObj.getProject(viewObj.id).completed) buttonWrapper.append(markCompleted)
                     break;
 
                 case "2":
@@ -605,6 +609,18 @@ export class HTMLwriter {
 
                 case "3":
                     // Edit mode
+                    saveButton.addEventListener("click", (e) => {
+                        viewObj.saveChanges(viewObj.view, viewObj.mode)
+                    })
+
+                    cancelButton.dataset.view = "4";
+                    cancelButton.dataset.mode = "1";
+                    cancelButton.dataset.id = viewObj.id;
+
+                    cancelButton.addEventListener("click", (e) => {
+                        viewObj.updateView(e)
+                    })
+
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
             
@@ -618,16 +634,62 @@ export class HTMLwriter {
             switch (viewObj.mode) {
                 case "1":
                     // View mode
-                    buttonWrapper.append(markCompleted, editTask, deleteProject)
+                    markCompleted.dataset.view = "5";
+                    markCompleted.dataset.mode = "1";
+                    markCompleted.dataset.id = viewObj.id;
+
+                    markCompleted.addEventListener("click", (e) => {
+                        viewObj.markCompleted(viewObj.view, viewObj.id)
+                    })
+
+                    editTask.dataset.view = "5";
+                    editTask.dataset.mode = "3";
+                    editTask.dataset.id = viewObj.id;
+
+                    editTask.addEventListener("click", (e) => viewObj.updateView(e))
+
+                    deleteProject.addEventListener("click", (e) => {
+                        if (window.confirm("Are you sure you want to delete task?")) {
+                            viewObj.deleteObject(viewObj.view, viewObj.id)
+                        }
+                    })
+
+                    if (!viewObj.getTask(viewObj.id).completed) buttonWrapper.append(markCompleted)
+
+                    buttonWrapper.append(editTask, deleteProject)
                     break;
 
                 case "2":
                     // New mode
+                    saveButton.addEventListener("click", (e) => {
+                        viewObj.saveChanges(viewObj.view, viewObj.mode)
+                    })
+
+                    cancelButton.dataset.view = "4";
+                    cancelButton.dataset.mode = "1";
+                    cancelButton.dataset.id = viewObj.id;
+
+                    cancelButton.addEventListener("click", (e) => {
+                        viewObj.updateView(e)
+                    })
+
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
 
                 case "3":
                     // Edit mode
+                    saveButton.addEventListener("click", (e) => {
+                        viewObj.saveChanges(viewObj.view, viewObj.mode)
+                    })
+
+                    cancelButton.dataset.view = "5";
+                    cancelButton.dataset.mode = "1";
+                    cancelButton.dataset.id = viewObj.id;
+
+                    cancelButton.addEventListener("click", (e) => {
+                        viewObj.updateView(e)
+                    })
+
                     buttonWrapper.append(saveButton, cancelButton)
                     break;
             
