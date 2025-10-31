@@ -1,7 +1,7 @@
 import { HTMLwriter } from "./HTMLwriter";
 import { OperationManager } from "./operation";
 import { StorageWriter } from "./storage";
-import { compareAsc } from "date-fns";
+
 /* 
 Represent application state.
 
@@ -26,6 +26,7 @@ export class ViewController {
 
     constructor(projects) {
         this.projects = projects;
+        this.sortItems()
         this.operationManager = new OperationManager(this)
 
         // Get wrappers
@@ -68,10 +69,6 @@ export class ViewController {
                 if (task.id == taskid) return task;
             }
         }
-    }
-
-    getDueToday() {
-
     }
 
     getUpcoming() {

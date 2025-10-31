@@ -9,7 +9,6 @@ import saveIcon from "./images/save.svg"
 import cancelIcon from "./images/cancel.svg"
 import deleteIcon from "./images/delete.svg"
 import editIcon from "./images/edit.svg"
-import { addDays, formatRelative } from "date-fns"
 
 export class HTMLwriter {
 
@@ -123,16 +122,9 @@ export class HTMLwriter {
 
         switch (viewObj.view) {
             case "1":
-                const today = viewObj.projects[0].tasks
-                return HTMLwriter.generateFixedView(today, "1")
-
             case "2":
-                const upcoming = viewObj.projects[0].tasks
-                return HTMLwriter.generateFixedView(upcoming, "2")
-
             case "3":
-                const important = viewObj.projects[0].tasks
-                return HTMLwriter.generateFixedView(important, "3")
+                return HTMLwriter.generateFixedView(viewObj)
 
             case "4":
                 const project = viewObj.getProject(viewObj.id)
@@ -182,7 +174,7 @@ export class HTMLwriter {
 
         const dueDate = document.createElement("p")
         dueDate.classList.add("due-date")
-        const dateString = "Due " + formatRelative(project.dueDate, new Date()).split(' at ')[0]
+        const dateString = "Due " + project.getDateFormat()
         dueDate.appendChild(document.createTextNode(dateString))
 
         const notesHeader = document.createElement("h2")
@@ -212,7 +204,7 @@ export class HTMLwriter {
             const taskImg = document.createElement("img")
             taskImg.src = task.completed ? checkIcon : taskIcon;
             taskImg.classList.add("project-task-icon", "icon")
-            const dateTaskString = "Due " + formatRelative(task.dueDate, new Date()).split(' at ')[0]
+            const dateTaskString = "Due " + task.getDateFormat()
             dateDiv.append(taskImg, document.createTextNode(dateTaskString))
 
             taskDiv.append(dateDiv, document.createTextNode(task.name))
@@ -259,7 +251,7 @@ export class HTMLwriter {
 
         const dueDate = document.createElement("p")
         dueDate.classList.add("due-date")
-        const dateTaskString = "Due " + formatRelative(task.dueDate, new Date()).split(' at ')[0]
+        const dateTaskString = "Due " + task.getDateFormat()
         dueDate.appendChild(document.createTextNode(dateTaskString))
 
         const notesHeader = document.createElement("h2")
@@ -477,7 +469,7 @@ export class HTMLwriter {
             inputTitle.value = task.name;
             inputDescription.value = task.description;
             inputNotes.value = task.notes;
-            inputDate.valueAsDate = task.date;
+            inputDate.valueAsDate = task.dueDate;
             inputRadioStandard.checked = task.important ? 0 : 1;
             inputRadioImportant.checked = task.important ? 1 : 0;
         }
@@ -704,10 +696,9 @@ export class HTMLwriter {
         return buttonWrapper;
     }
 
-    static generateFixedView(tasks, view) {
+    static generateFixedView(viewObj) {
         // View Wrapper
         const mainWrapper = document.createElement("div")
-
 
         // Information object
         const titleWrapper = document.createElement("div")
@@ -719,19 +710,33 @@ export class HTMLwriter {
         const title = document.createElement("h1")
         title.classList.add("project-title")
 
-        switch (view) {
+        let hasTasks = false;
+
+        switch (viewObj.view) {
             case "1":
                 titleImg.src = todayIcon;
                 title.appendChild(document.createTextNode("Due today"))
+
+                for (let project of viewObj.projects) {
+                    if (project.getTasksDueToday().length) hasTasks = true;
+                }
                 break;
 
             case "2":
                 titleImg.src = upcomingIcon;
                 title.appendChild(document.createTextNode("Upcoming"))
+
+                for (let project of viewObj.projects) {
+                    if (project.getUpcomingTasks().length) hasTasks = true;
+                }
                 break;
             case "3":
                 titleImg.src = importantIcon;
                 title.appendChild(document.createTextNode("Important"))
+
+                for (let project of viewObj.projects) {
+                    if (project.getImportantTasks().length) hasTasks = true;
+                }
                 break;
 
             default:
@@ -744,24 +749,64 @@ export class HTMLwriter {
         const taskWrapper = document.createElement("div")
         taskWrapper.classList.add("task-wrapper")
 
-        for (const task of tasks) {
+        if (hasTasks) {
 
-            const taskDiv = document.createElement("div")
-            taskDiv.classList.add("proj-task")
+            for (const project of viewObj.projects) {
 
-            const dateDiv = document.createElement("div")
-            dateDiv.classList.add("proj-task-date")
+                let taskList = [];
+                switch (viewObj.view) {
+                    case "1":
+                        taskList = project.getTasksDueToday();
+                        break;
+                    case "2":
+                        taskList = project.getUpcomingTasks();
+                        break;
+                    case "3":
+                        taskList = project.getImportantTasks();
+                        break;
+                    default:
+                        break;
+                }
 
-            const taskImg = document.createElement("img")
-            taskImg.src = task.completed ? checkIcon : taskIcon;
-            taskImg.classList.add("project-task-icon", "icon")
+                if (taskList.length > 0) {
 
-            dateDiv.append(taskImg, document.createTextNode(task.dueDate))
+                    const projDiv = document.createElement("div")
+                    projDiv.classList.add("proj-proj")
 
-            taskDiv.append(dateDiv, document.createTextNode(task.name))
+                    const projImg = document.createElement("img")
+                    projImg.src = project.completed ? checkIcon : projectIcon;
+                    projImg.classList.add("project-proj-icon", "icon")
 
-            taskWrapper.appendChild(taskDiv);
+                    projDiv.append(projImg, document.createTextNode(project.name))
+
+                    taskWrapper.appendChild(projDiv)
+
+                    for (const task of taskList) {
+
+                        const taskDiv = document.createElement("div")
+                        taskDiv.classList.add("proj-task")
+
+                        const dateDiv = document.createElement("div")
+                        dateDiv.classList.add("proj-task-date")
+
+                        const taskImg = document.createElement("img")
+                        taskImg.src = task.completed ? checkIcon : taskIcon;
+                        taskImg.classList.add("project-task-icon", "icon")
+
+                        dateDiv.append(taskImg, document.createTextNode(task.getDateFormat()))
+
+                        taskDiv.append(dateDiv, document.createTextNode(task.name))
+
+                        taskWrapper.appendChild(taskDiv);
+                    }
+                }
+            }
+
+        } else {
+            taskWrapper.append(document.createTextNode("No tasks to display"))
+            // append no tasks to display
         }
+        
 
         mainWrapper.append(titleWrapper, taskWrapper)
 

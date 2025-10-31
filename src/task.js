@@ -1,3 +1,4 @@
+import { differenceInCalendarDays, formatRelative, format } from "date-fns";
 export class Task {
 
     constructor(name, description, notes, dueDate, projectid, priority) {
@@ -17,5 +18,13 @@ export class Task {
 
     markUncompleted() {
         this.completed = false;
+    }
+
+    getDateFormat() {
+        if (differenceInCalendarDays(this.dueDate, new Date()) >= 8) {
+            return format(this.dueDate, "dd.MM.yyyy")
+        } else {
+            return formatRelative(this.dueDate, new Date()).split(' at ')[0]
+        }
     }
 }
