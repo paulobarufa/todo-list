@@ -97,6 +97,10 @@ body {
     margin-right: 5px;
 }
 
+.important-icon {
+    filter: invert(14%) sepia(92%) saturate(4707%) hue-rotate(359deg) brightness(101%) contrast(122%);
+}
+
 .proj-col-title {
     font-weight: 600;
 }

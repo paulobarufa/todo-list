@@ -9,6 +9,7 @@ import saveIcon from "./images/save.svg"
 import cancelIcon from "./images/cancel.svg"
 import deleteIcon from "./images/delete.svg"
 import editIcon from "./images/edit.svg"
+import importantTaskIcon from "./images/importanttask.svg"
 
 export class HTMLwriter {
 
@@ -103,8 +104,16 @@ export class HTMLwriter {
                 const taskImg = document.createElement("img");
                 taskImg.src = task.completed ? checkIcon : taskIcon;
                 taskImg.classList.add("col-icon", "task-icon", "icon");
-                
+
                 taskDiv.append(taskImg, taskTitle);
+
+                if (task.priority == 1) {
+                    const importantImg = document.createElement("img")
+                    importantImg.src = importantTaskIcon;
+                    importantImg.classList.add("col-icon", "important-icon")
+
+                    taskDiv.append(importantImg)
+                }
 
                 taskDiv.dataset.view = "5";
                 taskDiv.dataset.mode = "1";
