@@ -71,14 +71,6 @@ export class ViewController {
         }
     }
 
-    getUpcoming() {
-
-    }
-
-    getImportant() {
-
-    }
-
     sortItems() {
         this.projects = this.projects.sort((a, b) => a.dueDate - b.dueDate)
         for (let project of this.projects) {
@@ -87,15 +79,29 @@ export class ViewController {
     }
     
     updateView(e) {
-        
+
+        console.log(e)
         this.sortItems()
         
         if (e instanceof Event) {
-            this.view = e.target.dataset.view;
-            this.mode = e.target.dataset.mode;
-            this.id = e.target.dataset.id;
+
+            let targetElement = e.target;
+
+            if (e.target.classList.contains("proj-task-date") ||
+                e.target.classList.contains("col-icon") || 
+                e.target.classList.contains("project-proj-icon")) {
+
+                targetElement = e.target.parentElement;
+            }
+
+            if (e.target.classList.contains("project-task-icon")) {
+                targetElement = e.target.parentElement.parentElement;
+            }
+
+            this.view = targetElement.dataset.view;
+            this.mode = targetElement.dataset.mode;
+            this.id = targetElement.dataset.id;
         }
-        
         
         // Clear Wrappers
         this.mainPanel.innerHTML = "";

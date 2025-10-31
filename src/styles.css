@@ -71,6 +71,13 @@ body {
 
 .dynamic-wrapper {
     grid-row: 2 / 3;
+    overflow-y: auto;
+    height: 415px;
+    margin-right: 3px;
+}
+
+.line-separator {
+    margin: 20px;
 }
 
 .col-item {
@@ -287,4 +294,19 @@ input[type="radio"]:checked::before {
 
 .min-icon {
     height: 30px;
+}
+
+::-webkit-scrollbar {
+    background-color: var(--main-color);
+    width: 8px;
+    margin-right: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(233, 233, 233);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--main-color);
+    border-radius: 10px;
 }

@@ -65,7 +65,10 @@ export class HTMLwriter {
         colImportant.append(importantImg, document.createTextNode("Important"))
         colImportant.addEventListener("click", (e) => viewObj.updateView(e))
 
-        fixedWrapper.append(colToday, colUpcoming, colImportant)
+        const lineSeparator = document.createElement("hr")
+        lineSeparator.classList.add("line-separator")
+
+        fixedWrapper.append(colToday, colUpcoming, colImportant, lineSeparator)
 
         // Dynamic Wrapper
         const dynamicWrapper = document.createElement("div");
@@ -779,6 +782,11 @@ export class HTMLwriter {
 
                     projDiv.append(projImg, document.createTextNode(project.name))
 
+                    projDiv.dataset.view = "4";
+                    projDiv.dataset.mode = "1";
+                    projDiv.dataset.id = project.id;
+                    projDiv.addEventListener("click", (e) => viewObj.updateView(e))
+
                     taskWrapper.appendChild(projDiv)
 
                     for (const task of taskList) {
@@ -796,6 +804,11 @@ export class HTMLwriter {
                         dateDiv.append(taskImg, document.createTextNode(task.getDateFormat()))
 
                         taskDiv.append(dateDiv, document.createTextNode(task.name))
+
+                        taskDiv.dataset.view = "5";
+                        taskDiv.dataset.mode = "1";
+                        taskDiv.dataset.id = task.id;
+                        taskDiv.addEventListener("click", (e) => viewObj.updateView(e))
 
                         taskWrapper.appendChild(taskDiv);
                     }
